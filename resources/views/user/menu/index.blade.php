@@ -1,0 +1,98 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center gap-3">
+            <a href="{{ route('user.menu.index') }}" class="p-2 rounded-lg text-slate-500 hover:bg-white/5 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            </a>
+            <span>{{ $canteen->name }}</span>
+        </div>
+    </x-slot>
+
+    <!-- Category Tabs -->
+    <div x-data="{ activeTab: 'semua' }" class="space-y-6">
+        <div class="flex flex-wrap gap-2">
+            <button @click="activeTab = 'semua'" :class="activeTab === 'semua' ? 'gradient-primary text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-xl font-semibold text-sm transition-all duration-300" style="border: 1px solid rgba(99,102,241,0.15);">
+                Semua
+            </button>
+            <button @click="activeTab = 'makanan'" :class="activeTab === 'makanan' ? 'gradient-primary text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-xl font-semibold text-sm transition-all duration-300" style="border: 1px solid rgba(99,102,241,0.15);">
+                🍽️ Makanan
+            </button>
+            <button @click="activeTab = 'minuman'" :class="activeTab === 'minuman' ? 'gradient-primary text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-xl font-semibold text-sm transition-all duration-300" style="border: 1px solid rgba(99,102,241,0.15);">
+                🥤 Minuman
+            </button>
+            <button @click="activeTab = 'snack'" :class="activeTab === 'snack' ? 'gradient-primary text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-xl font-semibold text-sm transition-all duration-300" style="border: 1px solid rgba(99,102,241,0.15);">
+                🍿 Snack
+            </button>
+        </div>
+
+        <!-- Menu Grid -->
+        @php
+            $allMenus = collect()->merge($makanan)->merge($minuman)->merge($snack);
+        @endphp
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            @forelse($allMenus as $menu)
+                <div x-show="activeTab === 'semua' || activeTab === '{{ $menu->category }}'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="group rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-indigo-500/10 transition-all duration-300" style="background: rgba(30,27,75,0.5); border: 1px solid rgba(99,102,241,0.12);">
+                    <!-- Image -->
+                    <div class="relative overflow-hidden aspect-[4/3]">
+                        @if($menu->image)
+                            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center" style="background: rgba(255,255,255,0.03);">
+                                <svg class="w-12 h-12 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            </div>
+                        @endif
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-1 text-xs font-bold rounded-lg backdrop-blur-sm
+                                @if($menu->category === 'makanan') bg-orange-500/20 text-orange-300
+                                @elseif($menu->category === 'minuman') bg-blue-500/20 text-blue-300
+                                @else bg-pink-500/20 text-pink-300
+                                @endif
+                            ">{{ ucfirst($menu->category) }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="p-4">
+                        <h3 class="font-bold text-white text-lg mb-1 truncate">{{ $menu->name }}</h3>
+                        @if($menu->description)
+                            <p class="text-sm text-slate-400 mb-3 line-clamp-2">{{ $menu->description }}</p>
+                        @endif
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-lg font-extrabold text-emerald-400">{{ $menu->formatted_price }}</span>
+                            <form action="{{ route('user.cart.add', $menu) }}" method="POST" class="flex items-center gap-2">
+                                @csrf
+                                <input type="number" name="quantity" value="1" min="1" max="99" class="w-14 text-center rounded-lg text-sm py-1.5" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0;">
+                                <button type="submit" class="p-2.5 gradient-primary text-white rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all duration-300" title="Tambah ke keranjang">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                        @if(isset($cart[$menu->id]))
+                            <p class="text-xs text-indigo-400 mt-2 flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                                {{ $cart[$menu->id] }} di keranjang
+                            </p>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="col-span-full text-center py-16">
+                    <svg class="w-16 h-16 text-slate-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    <p class="text-xl font-semibold text-slate-400">Belum ada menu tersedia</p>
+                </div>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Floating Cart Button -->
+    @php $cartCount = array_sum(session()->get('cart', [])); @endphp
+    @if($cartCount > 0)
+        <a href="{{ route('user.cart.index') }}" class="fixed bottom-6 right-6 z-50 gradient-primary text-white px-6 py-3 rounded-2xl shadow-xl shadow-indigo-500/30 hover:shadow-indigo-500/50 flex items-center gap-3 transition-all duration-300 hover:scale-105">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
+            <span class="font-bold">Keranjang</span>
+            <span class="bg-white/20 backdrop-blur-sm px-2.5 py-0.5 rounded-lg text-sm font-bold">{{ $cartCount }}</span>
+        </a>
+    @endif
+</x-app-layout>
+
