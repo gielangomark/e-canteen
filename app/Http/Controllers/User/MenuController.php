@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Canteen;
+use App\Models\Menu;
 
 class MenuController extends Controller
 {
@@ -16,6 +17,23 @@ class MenuController extends Controller
             ->get();
 
         return view('user.menu.canteens', compact('canteens'));
+    }
+
+    public function search()
+    {
+        $query = request('q', '');
+
+        $menus = Menu::where('is_available', true)
+            ->whereHas('canteen', fn ($q) => $q->where('is_active', true))
+            ->when($query, function ($builder) use ($query) {
+                $builder->where('name', 'like', '%' . $query . '%');
+            })
+            ->with('canteen')
+            ->get();
+
+        $cart = session()->get('cart', []);
+
+        return view('user.menu.search', compact('menus', 'query', 'cart'));
     }
 
     public function canteen(Canteen $canteen)

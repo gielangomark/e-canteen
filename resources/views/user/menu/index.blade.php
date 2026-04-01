@@ -10,6 +10,17 @@
 
     <!-- Category Tabs -->
     <div x-data="{ activeTab: 'semua' }" class="space-y-6">
+        <!-- Search Bar -->
+        <form action="{{ route('user.menu.search') }}" method="GET" class="relative">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" name="q" placeholder="Cari menu..."
+                class="w-full pl-12 pr-12 py-3 rounded-2xl text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                style="background: rgba(30,27,75,0.6); border: 1px solid rgba(99,102,241,0.2);">
+            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 gradient-primary rounded-xl text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
+        </form>
+
         <div class="flex flex-wrap gap-2">
             <button @click="activeTab = 'semua'" :class="activeTab === 'semua' ? 'gradient-primary text-white shadow-lg shadow-indigo-500/25' : 'text-slate-400 hover:text-white'" class="px-5 py-2 rounded-xl font-semibold text-sm transition-all duration-300" style="border: 1px solid rgba(99,102,241,0.15);">
                 Semua

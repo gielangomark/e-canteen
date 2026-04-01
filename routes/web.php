@@ -6,6 +6,7 @@ use App\Http\Controllers\SuperAdmin\CanteenController;
 use App\Http\Controllers\SuperAdmin\BalanceRequestController as SuperAdminBalanceRequestController;
 use App\Http\Controllers\SuperAdmin\WithdrawalController as SuperAdminWithdrawalController;
 use App\Http\Controllers\SuperAdmin\ReportController as SuperAdminReportController;
+use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use App\Http\Controllers\Seller\DashboardController as SellerDashboardController;
 use App\Http\Controllers\Seller\MenuController as SellerMenuController;
 use App\Http\Controllers\Seller\OrderController as SellerOrderController;
@@ -64,6 +65,9 @@ Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super-a
 
     // Reports
     Route::get('/reports', [SuperAdminReportController::class, 'index'])->name('reports.index');
+
+    // User Management
+    Route::resource('users', SuperAdminUserController::class)->except(['show']);
 });
 
 /*
@@ -100,6 +104,7 @@ Route::middleware(['auth', 'user'])->name('user.')->group(function () {
 
     // Browse Canteens & Menus
     Route::get('/menu', [UserMenuController::class, 'index'])->name('menu.index');
+    Route::get('/menu/search', [UserMenuController::class, 'search'])->name('menu.search');
     Route::get('/menu/canteen/{canteen}', [UserMenuController::class, 'canteen'])->name('menu.canteen');
 
     // Cart

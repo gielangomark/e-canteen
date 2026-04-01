@@ -57,3 +57,60 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deploy to Vercel
+
+This project is configured for Vercel using:
+
+- `api/index.php` as the serverless PHP entrypoint
+- `vercel.json` for route mapping to Laravel and public assets
+
+### 1) Push project to GitHub
+
+Make sure this repository is available on GitHub (or Git provider supported by Vercel).
+
+### 2) Import project in Vercel
+
+1. Open Vercel dashboard.
+2. Click **Add New Project**.
+3. Import this repository.
+
+### 3) Set Environment Variables in Vercel
+
+Set these in Project Settings -> Environment Variables:
+
+- `APP_NAME=E-Canteen`
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_URL=https://your-project-domain.vercel.app`
+- `APP_KEY=base64:...` (generate once locally with `php artisan key:generate --show`)
+
+Database (use your hosted DB, not local XAMPP):
+
+- `DB_CONNECTION=mysql`
+- `DB_HOST=...`
+- `DB_PORT=3306`
+- `DB_DATABASE=...`
+- `DB_USERNAME=...`
+- `DB_PASSWORD=...`
+
+Recommended for serverless:
+
+- `SESSION_DRIVER=cookie`
+- `CACHE_STORE=array`
+- `QUEUE_CONNECTION=sync`
+- `LOG_CHANNEL=stderr`
+
+### 4) Build Command
+
+In Project Settings -> Build & Development Settings, set Build Command:
+
+`npm run build`
+
+This generates Vite assets in `public/build` for production.
+
+### 5) Redeploy
+
+After env vars are set, trigger a new deploy from Vercel.
+
+If your app uses migrations, run them against your production DB before using the app.

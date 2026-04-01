@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Super Admin',
             'email' => 'admin@ecanteen.test',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('11223344'),
             'role' => 'super_admin',
             'balance' => 0,
             'email_verified_at' => now(),
@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
             $seller = User::create([
                 'name' => "Seller Kantin $i",
                 'email' => "seller$i@ecanteen.test",
-                'password' => Hash::make('password'),
+                'password' => Hash::make('11223344'),
                 'role' => 'seller',
                 'balance' => 0,
                 'email_verified_at' => now(),
@@ -123,7 +123,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Gielang',
             'email' => 'gielang@ecanteen.test',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('11223344'),
             'role' => 'user',
             'balance' => 100000,
             'email_verified_at' => now(),

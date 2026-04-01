@@ -57,21 +57,9 @@
                 display: flex; align-items: center; justify-content: center;
                 box-shadow: 0 0 0 0 rgba(99,102,241,0), 0 25px 80px rgba(99,102,241,0.3);
                 position: relative;
+                overflow: hidden;
             }
-            .intro-logo svg { width: 70px; height: 70px; color: white; }
-            .intro-logo::after {
-                content: ''; position: absolute; inset: -3px; border-radius: 30px;
-                background: linear-gradient(135deg, rgba(129,140,248,0.6), rgba(124,58,237,0.6));
-                z-index: -1; opacity: 0;
-                filter: blur(15px);
-            }
-
-            /* Sheen sweep */
-            .intro-logo::before {
-                content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-                border-radius: 28px; z-index: 2;
-            }
+            .intro-logo svg { width: 70px; height: 70px; color: white; position: relative; z-index: 3; }
 
             /* Intro text */
             .intro-title {

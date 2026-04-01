@@ -1,6 +1,19 @@
 <x-app-layout>
     <x-slot name="header">Pilih Kantin</x-slot>
 
+    <!-- Search Bar -->
+    <div class="mb-6">
+        <form action="{{ route('user.menu.search') }}" method="GET" class="relative">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <input type="text" name="q" placeholder="Cari menu di semua kantin..."
+                class="w-full pl-12 pr-12 py-3.5 rounded-2xl text-white placeholder-slate-500 text-base focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                style="background: rgba(30,27,75,0.6); border: 1px solid rgba(99,102,241,0.2);">
+            <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 gradient-primary rounded-xl text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </button>
+        </form>
+    </div>
+
     @if($canteens->isEmpty())
         <div class="text-center py-16">
             <svg class="w-20 h-20 text-slate-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
